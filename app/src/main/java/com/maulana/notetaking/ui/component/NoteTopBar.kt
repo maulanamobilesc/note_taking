@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,7 +42,7 @@ fun NoteTopBar() {
 }
 
 @Composable
-fun InputNoteTopBar(onClickLeftAction: () -> Unit) {
+fun InputNoteTopBar(onClickLeftAction: () -> Unit, onClickRightAction: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,8 +57,8 @@ fun InputNoteTopBar(onClickLeftAction: () -> Unit) {
             Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "Menu")
         }
         Text(text = "All Notes")
-        IconButton(onClick = {}) {
-            Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Search")
+        IconButton(onClick = onClickRightAction) {
+            Icon(imageVector = Icons.Default.Clear, contentDescription = "Clear")
         }
     }
 }
@@ -75,6 +75,6 @@ fun NoteTopBarScreenPreview() {
 @Preview(showSystemUi = true)
 fun InputNoteTopBarScreenPreview() {
     NoteTakingTheme(dynamicColor = false) {
-        InputNoteTopBar({})
+        InputNoteTopBar({}, {})
     }
 }

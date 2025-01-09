@@ -30,8 +30,8 @@ import com.maulana.notetaking.ui.component.NoteTopBar
 import com.maulana.notetaking.ui.screen.home.HomeScreen
 import com.maulana.notetaking.ui.screen.notedetail.NoteDetailScreen
 import com.maulana.notetaking.ui.screen.OnBoardingScreen
+import com.maulana.notetaking.ui.screen.login.LoginScreen
 import com.maulana.notetaking.ui.screen.notedetail.NoteDetailViewModel
-import com.maulana.notetaking.ui.theme.Lotion
 import com.maulana.notetaking.ui.theme.TerraCotta
 import kotlinx.serialization.Serializable
 
@@ -49,7 +49,7 @@ fun NoteTakingApp() {
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val noteDetailViewModel: NoteDetailViewModel = hiltViewModel()
+    lateinit var noteDetailViewModel: NoteDetailViewModel
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackBarState) },
@@ -60,10 +60,14 @@ fun NoteTakingApp() {
                 }
             } else if (backStackEntry?.destination?.route?.contains(NoteDetailRoute::class.qualifiedName.orEmpty()) == true) {
                 AnimatedVisibility(true) {
-                    InputNoteTopBar({
+                    InputNoteTopBar(onClickLeftAction = {
                         noteDetailViewModel.processIntent(NoteIntent.SaveNote)
                         navController.navigateUp()
-                    })
+                    }, onClickRightAction = {
+                        noteDetailViewModel.processIntent(NoteIntent.DeleteNote)
+                        navController.navigateUp()
+                    }
+                    )
                 }
             }
         },
@@ -92,9 +96,14 @@ fun NoteTakingApp() {
                 HomeScreen(navController)
             }
 
+            composable<LoginRoute> {
+                LoginScreen(navController)
+            }
+
             composable<NoteDetailRoute> {
+                noteDetailViewModel = hiltViewModel()
                 val args = it.toRoute<NoteDetailRoute>()
-                NoteDetailScreen(args.id, navController, noteDetailViewModel)
+                NoteDetailScreen(args.id, navController, noteDetailViewModel, snackBarState)
             }
         }
     }
@@ -105,6 +114,9 @@ object OnBoardingRoute
 
 @Serializable
 object HomeRoute
+
+@Serializable
+object LoginRoute
 
 @Serializable
 data class NoteDetailRoute(

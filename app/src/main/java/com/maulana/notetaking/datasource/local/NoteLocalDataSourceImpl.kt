@@ -6,12 +6,16 @@ import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.ext.toRealmList
 import io.realm.kotlin.types.RealmList
+import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
 
 class NoteLocalDataSourceImpl @Inject constructor(private val realm: Realm) : NoteLocalDataSource {
 
     override suspend fun insertNote(note: NoteRealm) {
         realm.write {
+            if (note.id.isEmpty()) {
+                note.id = ObjectId().toString()
+            }
             copyToRealm(note, updatePolicy = UpdatePolicy.ALL)
         }
     }
@@ -29,6 +33,8 @@ class NoteLocalDataSourceImpl @Inject constructor(private val realm: Realm) : No
     }
 
     override suspend fun deleteNote(note: NoteRealm) {
-        TODO("Not yet implemented")
+        realm.write {
+            findLatest(note)?.let { delete(it) }
+        }
     }
 }
