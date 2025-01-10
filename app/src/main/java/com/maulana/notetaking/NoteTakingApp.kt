@@ -27,11 +27,12 @@ import androidx.navigation.toRoute
 import com.maulana.notetaking.domain.NoteIntent
 import com.maulana.notetaking.ui.component.InputNoteTopBar
 import com.maulana.notetaking.ui.component.NoteTopBar
-import com.maulana.notetaking.ui.screen.home.HomeScreen
-import com.maulana.notetaking.ui.screen.notedetail.NoteDetailScreen
 import com.maulana.notetaking.ui.screen.OnBoardingScreen
+import com.maulana.notetaking.ui.screen.home.HomeScreen
 import com.maulana.notetaking.ui.screen.login.LoginScreen
+import com.maulana.notetaking.ui.screen.notedetail.NoteDetailScreen
 import com.maulana.notetaking.ui.screen.notedetail.NoteDetailViewModel
+import com.maulana.notetaking.ui.screen.register.RegisterScreen
 import com.maulana.notetaking.ui.theme.TerraCotta
 import kotlinx.serialization.Serializable
 
@@ -100,6 +101,10 @@ fun NoteTakingApp() {
                 LoginScreen(navController)
             }
 
+            composable<RegisterRoute> {
+                RegisterScreen(navController)
+            }
+
             composable<NoteDetailRoute> {
                 noteDetailViewModel = hiltViewModel()
                 val args = it.toRoute<NoteDetailRoute>()
@@ -117,6 +122,9 @@ object HomeRoute
 
 @Serializable
 object LoginRoute
+
+@Serializable
+object RegisterRoute
 
 @Serializable
 data class NoteDetailRoute(
