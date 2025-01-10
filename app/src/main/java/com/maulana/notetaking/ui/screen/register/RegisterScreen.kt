@@ -21,6 +21,7 @@ import com.maulana.notetaking.ui.component.PrimaryButton
 import com.maulana.notetaking.ui.theme.GlobalDimension
 import com.maulana.notetaking.ui.theme.NoteTakingTheme
 import com.maulana.notetaking.ui.theme.TerraCotta
+import com.maulana.notetaking.util.noRippleClickable
 import com.maulana.warehouse.core.component.Spacer
 
 @Composable
@@ -85,7 +86,7 @@ fun RegisterContent(navHostController: NavHostController) {
         ) {
 
             PrimaryButton("Create Account") {
-                //navHostController.navigate(NoteDestination.route)
+
             }
             Spacer(GlobalDimension.componentPadding)
             Text(
@@ -93,6 +94,9 @@ fun RegisterContent(navHostController: NavHostController) {
                 fontSize = GlobalDimension.defaultFontSize,
                 style = TextStyle(fontWeight = FontWeight.ExtraBold),
                 color = TerraCotta,
+                modifier = Modifier.noRippleClickable {
+                    navHostController.navigateUp()
+                }
             )
         }
     }
