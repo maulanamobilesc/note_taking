@@ -28,6 +28,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.maulana.notetaking.HomeRoute
 import com.maulana.notetaking.RegisterRoute
 import com.maulana.notetaking.ui.component.PasswordField
 import com.maulana.notetaking.ui.component.PrimaryButton
@@ -147,7 +148,7 @@ fun LoginContent(navHostController: NavHostController, userName: String, passwor
                 height = Dimension.wrapContent
             }) {
             PrimaryButton("Login") {
-                //navHostController.navigate(NoteDestination.route)
+                navHostController.navigate(HomeRoute)
             }
             Spacer(8.dp)
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {

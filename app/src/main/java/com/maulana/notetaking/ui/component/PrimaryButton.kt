@@ -24,7 +24,7 @@ fun PrimaryButton(text: String, onClick: () -> Unit) {
         Text(
             text = text,
             fontSize = GlobalDimension.mainButtonFontSize,
-            style = TextStyle(fontWeight = FontWeight.Bold)
+            style = TextStyle(fontWeight = FontWeight.Black)
         )
     }
 }

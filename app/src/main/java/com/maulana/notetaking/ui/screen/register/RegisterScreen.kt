@@ -45,6 +45,8 @@ fun RegisterContent(navHostController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(text = "NOTELY", fontSize = GlobalDimension.mainButtonFontSize)
+            Spacer(GlobalDimension.sectionPadding)
             Text(
                 "Create a free account", fontSize = GlobalDimension.titleFontSize,
                 style = TextStyle(fontWeight = FontWeight.Bold)
