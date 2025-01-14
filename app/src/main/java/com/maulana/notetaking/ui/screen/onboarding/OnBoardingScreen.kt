@@ -1,4 +1,4 @@
-package com.maulana.notetaking.ui.screen
+package com.maulana.notetaking.ui.screen.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +46,7 @@ fun OnBoardingScreen(navController: NavHostController) {
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_note_onboarding_3x),
-                contentDescription = "note empty state"
+                contentDescription = "note onboarding"
             )
             Spacer(GlobalDimension.componentPadding)
             Text(

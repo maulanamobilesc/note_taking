@@ -27,7 +27,7 @@ import androidx.navigation.toRoute
 import com.maulana.notetaking.domain.NoteIntent
 import com.maulana.notetaking.ui.component.InputNoteTopBar
 import com.maulana.notetaking.ui.component.NoteTopBar
-import com.maulana.notetaking.ui.screen.OnBoardingScreen
+import com.maulana.notetaking.ui.screen.onboarding.OnBoardingScreen
 import com.maulana.notetaking.ui.screen.home.HomeScreen
 import com.maulana.notetaking.ui.screen.login.LoginScreen
 import com.maulana.notetaking.ui.screen.notedetail.NoteDetailScreen
@@ -125,6 +125,9 @@ object LoginRoute
 
 @Serializable
 object RegisterRoute
+
+@Serializable
+object PremiumRoute
 
 @Serializable
 data class NoteDetailRoute(
