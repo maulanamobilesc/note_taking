@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.sp
 
 object GlobalDimension {
 
+    val largePadding = 36.dp
     val mainPadding = 28.dp
     val secondaryPadding = 24.dp
     val componentPadding = 21.dp
@@ -15,4 +16,6 @@ object GlobalDimension {
     val defaultFontSize = 16.sp
     val smallFontSize = 12.sp
     val titleFontSize = 24.sp
+    val mainTitleFontSize = 28.sp
+
 }

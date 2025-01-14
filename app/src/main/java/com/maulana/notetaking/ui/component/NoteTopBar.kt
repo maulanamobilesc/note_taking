@@ -9,29 +9,42 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.maulana.notetaking.ui.theme.GlobalDimension
 import com.maulana.notetaking.ui.theme.NoteTakingTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
-fun NoteTopBar() {
+fun NoteTopBar(scope: CoroutineScope, drawerState: DrawerState) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = GlobalDimension.secondaryPadding,
-                vertical = GlobalDimension.sectionPadding
+                start = GlobalDimension.secondaryPadding,
+                end = GlobalDimension.secondaryPadding,
+                top = GlobalDimension.mainPadding
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(onClick = {}) {
+        IconButton(onClick = {
+            scope.launch {
+                drawerState.apply {
+                    if (isClosed) open() else close()
+                }
+            }
+        }) {
             Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
         }
         Text(text = "All Notes")
@@ -47,8 +60,9 @@ fun InputNoteTopBar(onClickLeftAction: () -> Unit, onClickRightAction: () -> Uni
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = GlobalDimension.secondaryPadding,
-                vertical = GlobalDimension.sectionPadding
+                start = GlobalDimension.secondaryPadding,
+                end = GlobalDimension.secondaryPadding,
+                top = GlobalDimension.mainPadding
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -67,7 +81,7 @@ fun InputNoteTopBar(onClickLeftAction: () -> Unit, onClickRightAction: () -> Uni
 @Preview(showSystemUi = true)
 fun NoteTopBarScreenPreview() {
     NoteTakingTheme(dynamicColor = false) {
-        NoteTopBar()
+        NoteTopBar(rememberCoroutineScope(), rememberDrawerState(DrawerValue.Closed))
     }
 }
 
