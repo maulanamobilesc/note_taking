@@ -9,7 +9,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,9 +25,13 @@ class HomeViewModel @Inject constructor(
     private val _notes = MutableStateFlow<RealmList<NoteRealm>>(realmListOf())
     val notes: StateFlow<RealmList<NoteRealm>> = _notes
 
+    private val _errorMessage: MutableSharedFlow<String> = MutableSharedFlow()
+    val errorMessage: SharedFlow<String> = _errorMessage
+
     fun processIntent(intent: HomeIntent) {
         when (intent) {
             is HomeIntent.GetAllNotes -> getAllNotes()
+            is HomeIntent.SearchNote -> searchNote(intent.query)
         }
     }
 
@@ -34,7 +40,19 @@ class HomeViewModel @Inject constructor(
             runCatching {
                 noteRepository.getAllNotes()
             }.onFailure {
+                _errorMessage.emit(it.localizedMessage.orEmpty())
+            }.onSuccess {
+                _notes.value = it
+            }
+        }
+    }
 
+    private fun searchNote(query: String) {
+        viewModelScope.launch(dispatcher) {
+            runCatching {
+                noteRepository.searchNote(query)
+            }.onFailure {
+                _errorMessage.emit(it.localizedMessage.orEmpty())
             }.onSuccess {
                 _notes.value = it
             }

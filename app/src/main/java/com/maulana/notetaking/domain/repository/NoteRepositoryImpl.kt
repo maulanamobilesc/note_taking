@@ -27,4 +27,8 @@ class NoteRepositoryImpl @Inject constructor(private val noteLocalDataSource: No
     override suspend fun deleteNote(note: NoteRealm) {
         return noteLocalDataSource.deleteNote(note)
     }
+
+    override fun searchNote(query: String): RealmList<NoteRealm> {
+        return noteLocalDataSource.searchNote(query)
+    }
 }

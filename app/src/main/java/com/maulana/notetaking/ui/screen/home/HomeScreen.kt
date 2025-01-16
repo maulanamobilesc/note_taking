@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,14 +41,24 @@ import com.maulana.notetaking.ui.theme.GlobalDimension
 import com.maulana.notetaking.ui.theme.Lotion
 import com.maulana.notetaking.ui.theme.NoteTakingTheme
 import com.maulana.warehouse.core.component.Spacer
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navController: NavHostController,
+    viewModel: HomeViewModel = hiltViewModel(),
+    snackBarState: SnackbarHostState
+) {
 
     val notes by viewModel.notes.collectAsState()
 
     LaunchedEffect(true) {
         viewModel.processIntent(HomeIntent.GetAllNotes)
+    }
+    LaunchedEffect(Unit) {
+        viewModel.errorMessage.collectLatest {
+            snackBarState.showSnackbar(message = it, duration = SnackbarDuration.Long)
+        }
     }
 
     if (notes.isNotEmpty()) {
@@ -59,7 +69,7 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(items = notes, key = { it.id }) {
-                NoteItem(it, {navController.navigate(NoteDetailRoute(it.id))})
+                NoteItem(it, { navController.navigate(NoteDetailRoute(it.id)) })
             }
         }
     } else {
@@ -68,14 +78,19 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
 }
 
 @Composable
-fun NoteItem(note: NoteRealm, onClick: () -> Unit ) {
+fun NoteItem(note: NoteRealm, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(12.dp))
             .background(color = Lotion)
-            .padding(GlobalDimension.sectionPadding).clickable { onClick() }
+            .padding(GlobalDimension.sectionPadding)
+            .clickable { onClick() }
     ) {
-        Text(fontWeight = FontWeight(800),text = note.title, fontSize = GlobalDimension.defaultFontSize)
+        Text(
+            fontWeight = FontWeight(800),
+            text = note.title,
+            fontSize = GlobalDimension.defaultFontSize
+        )
         Text(text = note.content, fontSize = GlobalDimension.smallFontSize)
     }
 }
@@ -123,6 +138,6 @@ fun EmptyStateContent(navController: NavHostController) {
 @Preview(showSystemUi = true, showBackground = true)
 fun HomeScreenPreview() {
     NoteTakingTheme(dynamicColor = false) {
-        HomeScreen(rememberNavController())
+        HomeScreen(rememberNavController(), snackBarState = SnackbarHostState())
     }
 }

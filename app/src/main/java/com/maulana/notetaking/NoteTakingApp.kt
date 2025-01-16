@@ -29,10 +29,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.maulana.notetaking.domain.HomeIntent
 import com.maulana.notetaking.domain.NoteIntent
 import com.maulana.notetaking.ui.component.InputNoteTopBar
 import com.maulana.notetaking.ui.component.NoteTopBar
 import com.maulana.notetaking.ui.screen.home.HomeScreen
+import com.maulana.notetaking.ui.screen.home.HomeViewModel
 import com.maulana.notetaking.ui.screen.login.LoginScreen
 import com.maulana.notetaking.ui.screen.notedetail.NoteDetailScreen
 import com.maulana.notetaking.ui.screen.notedetail.NoteDetailViewModel
@@ -62,6 +64,7 @@ fun NoteTakingApp() {
     val scope = rememberCoroutineScope()
 
     lateinit var noteDetailViewModel: NoteDetailViewModel
+    lateinit var homeViewModel: HomeViewModel
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -77,7 +80,16 @@ fun NoteTakingApp() {
             topBar = {
                 if (backStackEntry?.destination?.route == HomeRoute::class.qualifiedName) {
                     AnimatedVisibility(true) {
-                        NoteTopBar(scope,drawerState)
+                        NoteTopBar(
+                            scope,
+                            drawerState,
+                            onSearch = { query ->
+                                if (query.isEmpty()) {
+                                    homeViewModel.processIntent(HomeIntent.GetAllNotes)
+                                } else if (query.trim().length > 1) {
+                                    homeViewModel.processIntent(HomeIntent.SearchNote(query))
+                                }
+                            })
                     }
                 } else if (backStackEntry?.destination?.route?.contains(NoteDetailRoute::class.qualifiedName.orEmpty()) == true) {
                     AnimatedVisibility(true) {
@@ -114,7 +126,8 @@ fun NoteTakingApp() {
                 }
 
                 composable<HomeRoute> {
-                    HomeScreen(navController)
+                    homeViewModel = hiltViewModel()
+                    HomeScreen(navController, homeViewModel, snackBarState)
                 }
 
                 composable<LoginRoute> {

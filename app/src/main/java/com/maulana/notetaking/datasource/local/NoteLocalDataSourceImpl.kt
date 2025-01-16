@@ -37,4 +37,8 @@ class NoteLocalDataSourceImpl @Inject constructor(private val realm: Realm) : No
             findLatest(note)?.let { delete(it) }
         }
     }
+
+    override fun searchNote(query: String): RealmList<NoteRealm> {
+        return realm.query<NoteRealm>("title CONTAINS[c] $0 OR content CONTAINS[c] $0", query).find().toRealmList()
+    }
 }

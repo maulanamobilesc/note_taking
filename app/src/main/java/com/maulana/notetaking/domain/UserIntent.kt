@@ -7,4 +7,5 @@ sealed class NoteIntent {
 }
 sealed class HomeIntent {
     data object GetAllNotes : HomeIntent()
+    data class SearchNote(val query: String) : HomeIntent()
 }

@@ -15,4 +15,6 @@ interface NoteRepository {
 
     suspend fun deleteNote(note: NoteRealm)
 
+    fun searchNote(query: String): RealmList<NoteRealm>
+
 }
