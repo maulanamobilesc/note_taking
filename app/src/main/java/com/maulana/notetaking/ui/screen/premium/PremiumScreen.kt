@@ -1,15 +1,23 @@
 package com.maulana.notetaking.ui.screen.premium
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -17,6 +25,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.maulana.notetaking.HomeRoute
@@ -29,8 +38,16 @@ import com.maulana.notetaking.ui.theme.TerraCotta
 import com.maulana.notetaking.util.noRippleClickable
 import com.maulana.warehouse.core.component.Spacer
 
+enum class PremiumMode {
+    MONTHLY,
+    ANNUAL
+}
+
 @Composable
 fun PremiumScreen(navController: NavHostController) {
+
+    val premiumMode = rememberSaveable { mutableStateOf(PremiumMode.ANNUAL) }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -38,7 +55,24 @@ fun PremiumScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(GlobalDimension.sectionPadding)
-        Text(text = "Notely Premium", fontSize = GlobalDimension.mainButtonFontSize)
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Notely Premium",
+                fontSize = GlobalDimension.mainButtonFontSize, textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = GlobalDimension.mainPadding)
+            )
+            IconButton(onClick = {
+                navController.navigateUp()
+            }) {
+                Icon(imageVector = Icons.Default.Clear, "Close")
+            }
+        }
         Column(
             Modifier
                 .fillMaxWidth()
@@ -98,6 +132,13 @@ fun PremiumScreen(navController: NavHostController) {
                     Modifier
                         .fillMaxWidth(0.5f)
                         .padding(end = GlobalDimension.smallPadding)
+                        .clickable {
+                            premiumMode.value = PremiumMode.ANNUAL
+                        },
+                    border = if (premiumMode.value == PremiumMode.ANNUAL) BorderStroke(
+                        4.dp,
+                        color = TerraCotta
+                    ) else null
                 ) {
                     Column(
                         Modifier
@@ -131,6 +172,13 @@ fun PremiumScreen(navController: NavHostController) {
                     Modifier
                         .fillMaxWidth(1f)
                         .padding(start = GlobalDimension.smallPadding)
+                        .clickable {
+                            premiumMode.value = PremiumMode.MONTHLY
+                        },
+                    border = if (premiumMode.value == PremiumMode.MONTHLY) BorderStroke(
+                        4.dp,
+                        color = TerraCotta
+                    ) else null
                 ) {
                     Column(
                         Modifier
