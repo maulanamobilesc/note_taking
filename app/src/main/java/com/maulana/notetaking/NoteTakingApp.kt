@@ -39,6 +39,7 @@ import com.maulana.notetaking.ui.screen.login.LoginScreen
 import com.maulana.notetaking.ui.screen.notedetail.NoteDetailScreen
 import com.maulana.notetaking.ui.screen.notedetail.NoteDetailViewModel
 import com.maulana.notetaking.ui.screen.onboarding.OnBoardingScreen
+import com.maulana.notetaking.ui.screen.premium.PremiumScreen
 import com.maulana.notetaking.ui.screen.register.RegisterScreen
 import com.maulana.notetaking.ui.screen.sidemenu.SideMenu
 import com.maulana.notetaking.ui.theme.Beige
@@ -70,7 +71,7 @@ fun NoteTakingApp() {
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(drawerContainerColor = Beige) {
-                SideMenu(navController)
+                SideMenu(navController, drawerState, scope)
             }
         },
         scrimColor = TerraCotta
@@ -142,6 +143,10 @@ fun NoteTakingApp() {
                     noteDetailViewModel = hiltViewModel()
                     val args = it.toRoute<NoteDetailRoute>()
                     NoteDetailScreen(args.id, navController, noteDetailViewModel, snackBarState)
+                }
+
+                composable<PremiumRoute> {
+                    PremiumScreen(navController)
                 }
             }
         }
